@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import Link from 'next/link'
 
 export default function NotFound() {
   return (
@@ -12,12 +12,12 @@ export default function NotFound() {
           Lo sentimos, no pudimos encontrar la página que buscas.
         </p>
         <div className="mt-10">
-          <a
+          <Link
             href="/"
             className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Volver al inicio
-          </a>
+          </Link>
         </div>
       </div>
     </div>
