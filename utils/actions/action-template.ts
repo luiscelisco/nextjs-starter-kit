@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { CookieOptions } from "@supabase/ssr";
 
 export async function actionTemplate() {
   const { userId } = await auth();
@@ -12,28 +13,20 @@ export async function actionTemplate() {
   }
 
   const cookieStore = cookies();
-  
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        get(key: string) {
+          return cookieStore.get(key)?.value;
         },
-        set(name: string, value: string, options: { path: string; }) {
-          try {
-            cookieStore.set(name, value, options);
-          } catch (error) {
-            // Handle error in server component
-          }
+        set(key: string, value: string, options: CookieOptions) {
+          cookieStore.set(key, value, options);
         },
-        remove(name: string, options: { path: string; }) {
-          try {
-            cookieStore.set(name, "", { ...options, maxAge: 0 });
-          } catch (error) {
-            // Handle error in server component
-          }
+        remove(key: string, options: CookieOptions) {
+          cookieStore.set(key, "", { ...options, maxAge: 0 });
         }
       }
     }
