@@ -1,6 +1,16 @@
-# Getting Started
+# Next.js SaaS Starter Kit
 
-## Prerequisites
+A modern, full-stack starter template for building SaaS applications with Next.js. This starter kit provides a solid foundation with pre-configured integrations for authentication, payments, database management, and styling.
+
+## Features
+- 🔐 Authentication with Clerk (optional)
+- 💳 Payment processing with Stripe (optional)
+- 🗄️ Database integration with Supabase and Prisma
+- 🎨 Styling with Tailwind CSS
+- ⚡ Built on Next.js for optimal performance and SEO
+- 🛠️ Fully customizable and modular architecture
+
+## Getting Started
 - Node.js and yarn/bun installed
 - Accounts and API keys for:
   - Supabase

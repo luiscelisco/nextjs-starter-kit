@@ -3,54 +3,59 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building2, BedDouble, Bath, Square, MapPin } from 'lucide-react'
 import { DynamicMap } from './map-client'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
-// Datos de ejemplo - En un caso real, esto vendría de una base de datos
-const apartments = [
-  {
-    id: 1,
-    title: "Apartamento Moderno Centro",
-    location: "Centro Ciudad",
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 75,
-    price: 250000,
-    status: "Disponible",
-    coordinates: {
-      latitude: 40.4168,
-      longitude: -3.7038
-    }
-  },
-  {
-    id: 2,
-    title: "Ático de Lujo",
-    location: "Zona Norte",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 120,
-    price: 450000,
-    status: "Reservado",
-    coordinates: {
-      latitude: 40.4233,
-      longitude: -3.6927
-    }
-  },
-  {
-    id: 3,
-    title: "Estudio Céntrico",
-    location: "Centro Histórico",
-    bedrooms: 1,
-    bathrooms: 1,
-    area: 45,
-    price: 150000,
-    status: "Disponible",
-    coordinates: {
-      latitude: 40.4125,
-      longitude: -3.7097
-    }
-  },
-]
+interface Apartment {
+  id: number
+  title: string
+  location: string
+  bedrooms: number
+  bathrooms: number
+  area: number
+  price: number
+  status: string
+  coordinates: {
+    latitude: number
+    longitude: number
+  }
+}
 
 export function ApartmentsList() {
+  const [apartments, setApartments] = useState<Apartment[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchApartments() {
+      try {
+        const { data, error } = await supabase
+          .from('apartments')
+          .select('*')
+        
+        if (error) {
+          console.error('Error al cargar apartamentos:', error)
+          return
+        }
+
+        setApartments(data || [])
+      } catch (error) {
+        console.error('Error:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchApartments()
+  }, [])
+
+  if (loading) {
+    return <div className="text-center py-4">Cargando apartamentos...</div>
+  }
+
+  if (apartments.length === 0) {
+    return <div className="text-center py-4">No hay apartamentos disponibles</div>
+  }
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {apartments.map((apartment) => (
