@@ -71,3 +71,27 @@ model invoices {
   email           String
   user_id         String?
 }
+
+model apartments {
+  id          Int    @id @default(autoincrement())
+  title       String
+  location    String
+  bedrooms    Int
+  bathrooms   Int
+  area        Int
+  price       Int
+  status      String
+  coordinates Json   @db.Json
+}
+
+model employees {
+  id         BigInt  @id @default(autoincrement())
+  name       String
+  email      String
+  phone      String
+  position   String
+  department String
+  location   String
+  status     String
+  avatar_url String?
+}

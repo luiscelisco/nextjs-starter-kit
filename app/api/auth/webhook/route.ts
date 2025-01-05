@@ -55,21 +55,55 @@ export async function POST(req: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
 
-
   switch (eventType) {
     case "user.created":
       try {
-        await userCreate({
+        const userData = {
           email: payload?.data?.email_addresses?.[0]?.email_address,
           first_name: payload?.data?.first_name,
           last_name: payload?.data?.last_name,
           profile_image_url: payload?.data?.profile_image_url,
           user_id: payload?.data?.id,
+        };
+
+        // Verificar que tenemos los datos necesarios
+        if (!userData.email || !userData.user_id) {
+          console.error("Error en registro de usuario - Datos faltantes:", {
+            email: userData.email,
+            user_id: userData.user_id,
+            payload: payload.data,
+          });
+          return NextResponse.json({
+            status: 400,
+            message: "Datos de usuario incompletos",
+            details: "Email y user_id son requeridos",
+          });
+        }
+
+        const result = await userCreate(userData);
+
+        if ("code" in result) {
+          // Si hay un error de Supabase
+          console.error("Error al insertar usuario en base de datos:", {
+            error: result,
+            userData,
+          });
+          return NextResponse.json({
+            status: 500,
+            message: "Error al crear usuario en base de datos",
+            details: result,
+          });
+        }
+
+        console.log("Usuario creado exitosamente:", {
+          email: userData.email,
+          user_id: userData.user_id,
         });
 
         return NextResponse.json({
           status: 200,
-          message: "User info inserted",
+          message: "Usuario registrado correctamente",
+          data: result,
         });
       } catch (error: any) {
         return NextResponse.json({
