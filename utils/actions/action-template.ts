@@ -21,7 +21,21 @@ export async function actionTemplate() {
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
-      },
+        set(name: string, value: string, options: { path: string; }) {
+          try {
+            cookieStore.set(name, value, options);
+          } catch (error) {
+            // Handle error in server component
+          }
+        },
+        remove(name: string, options: { path: string; }) {
+          try {
+            cookieStore.set(name, "", { ...options, maxAge: 0 });
+          } catch (error) {
+            // Handle error in server component
+          }
+        }
+      }
     }
   );
 
