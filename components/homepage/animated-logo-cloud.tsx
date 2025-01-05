@@ -1,68 +1,57 @@
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-const logos = [
-  {
-    name: 'Prime',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/t2awrrfzdvmg1chnzyfr.svg',
-  },
-  {
-    name: 'Trustpilot',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tkfspxqmjflfllbuqxsi.svg',
-  },
-  {
-    name: 'Webflow',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/nymiivu48d5lywhf9rpf.svg',
-  },
-
-  {
-    name: 'Airbnb',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/pmblusboe7vkw8vxdknx.svg',
-  },
-  {
-    name: 'Tina',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/afqhiygywyphuou6xtxc.svg',
-  },
-  {
-    name: 'Stackoverflow',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/ts1j4mkooxqmscgptafa.svg',
-  },
-  {
-    name: 'mistral',
-    url: 'https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg',
-  },
-]
-
-const AnimatedLogoCloud = () => {
-  return (
-    <div className="w-full">
-      <div className="mx-auto w-full px-4 md:px-8">
-        <div
-          className="group relative mt-6 flex gap-6 overflow-hidden p-2"
-          style={{
-            maskImage:
-              'linear-gradient(to left, transparent 0%, black 20%, black 80%, transparent 95%)',
-          }}
-        >
-          {Array(5)
-            .fill(null)
-            .map((index) => (
-              <div
-                key={index}
-                className="flex shrink-0 animate-logo-cloud flex-row justify-around gap-6"
-              >
-                {logos.map((logo, key) => (
-                  <img
-                    key={key}
-                    src={logo.url}
-                    className="h-10 w-28 px-2"
-                    alt={`${logo.name}`}
-                  />
-                ))}
-              </div>
-            ))}
-        </div>
-      </div>
-    </div>
-  )
+interface Logo {
+  url: string;
+  alt: string;
 }
 
-export default AnimatedLogoCloud
+const logos: Logo[] = [
+  // Asumiendo que estos son tus logos actuales
+  { url: '/logos/logo1.png', alt: 'Logo 1' },
+  { url: '/logos/logo2.png', alt: 'Logo 2' },
+  // ... más logos
+];
+
+export function AnimatedLogoCloud() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
+  return (
+    <div className="relative flex h-20 w-full items-center justify-center gap-4 overflow-hidden bg-white dark:bg-black [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
+      <div className="flex min-w-full shrink-0 animate-infinite-scroll items-center justify-around gap-4">
+        {logos.map((logo, i) => (
+          <div key={i} className="relative h-16 w-16">
+            <Image
+              src={logo.url}
+              alt={logo.alt}
+              fill
+              className="object-contain"
+              sizes="(max-width: 64px) 100vw, 64px"
+            />
+          </div>
+        ))}
+      </div>
+      <div className="flex min-w-full shrink-0 animate-infinite-scroll items-center justify-around gap-4">
+        {logos.map((logo, i) => (
+          <div key={`duplicate-${i}`} className="relative h-16 w-16">
+            <Image
+              src={logo.url}
+              alt={logo.alt}
+              fill
+              className="object-contain"
+              sizes="(max-width: 64px) 100vw, 64px"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
