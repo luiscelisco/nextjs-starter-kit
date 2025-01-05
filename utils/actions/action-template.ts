@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { createClient } from "@supabase/ssr";
+import { createBrowserClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 export async function actionTemplate() {
@@ -13,7 +13,7 @@ export async function actionTemplate() {
 
   const cookieStore = cookies();
   
-  const supabase = createClient(
+  const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
