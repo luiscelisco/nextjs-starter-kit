@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
+import 'leaflet/dist/leaflet.css'
 
 interface MapClientProps {
   latitude: number
@@ -20,7 +21,6 @@ const MapClient = ({ latitude, longitude }: MapClientProps) => {
     const initMap = async () => {
       try {
         const L = (await import('leaflet')).default
-        await import('leaflet/dist/leaflet.css')
 
         if (!isMounted || !mapRef.current) return
 
